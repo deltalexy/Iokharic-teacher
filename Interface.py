@@ -23,16 +23,22 @@ class IokharicApp(QWidget):
         cab = QPushButton('Characters Active')
         wpb = QPushButton('Words Passive')
         wab = QPushButton('Words Active')
+        npb = QPushButton('Numbers Passive')
+        nab = QPushButton('Numbers Active')
         cpb.clicked.connect(self.assignfunc('cp'))
         cmb.clicked.connect(self.assignfunc('cm'))
         cab.clicked.connect(self.assignfunc('ca'))
         wpb.clicked.connect(self.assignfunc('wp'))
         wab.clicked.connect(self.assignfunc('wa'))
+        npb.clicked.connect(self.assignfunc('np'))
+        nab.clicked.connect(self.assignfunc('na'))
         layout.addWidget(cpb,0,0)
         layout.addWidget(cmb,1,0)
         layout.addWidget(cab,2,0)
         layout.addWidget(wpb,3,0)
         layout.addWidget(wab,4,0)
+        layout.addWidget(npb,5,0)
+        layout.addWidget(nab,6,0)
         optionbox.setLayout(layout)
 
         self.functionbox = QGroupBox()
@@ -86,18 +92,18 @@ class IokharicApp(QWidget):
                 self.answerfield.hide()
                 for i in range(len(self.buttonlist)):
                     self.buttonlist[i].show()
-            elif (type == 'wa') or (type == 'ca'):
+            elif (type == 'wa') or (type == 'ca') or (type == 'na'):
                 self.answerlabel.hide()
                 self.answerfield.hide()
             self.func()
         return interfunc
 
     def answer_check(self):
-        if (self.type == 'wa') or (self.type == 'ca'):
-            if self.type == 'wa':
-                pixmap = QPixmap(os.path.join(os.getenv('APPDATA'), 'Iokharic-teacher', 'temp.png'))
-            else:
+        if (self.type == 'wa') or (self.type == 'ca') or (self.type == 'na'):
+            if self.type == 'ca':
                 pixmap = QPixmap(symbollink(self.askfield.text()))
+            else:
+                pixmap = QPixmap(os.path.join(os.getenv('APPDATA'), 'Iokharic-teacher', 'temp.png'))
             self.judge.setPixmap(pixmap)
             self.judge.resize(pixmap.width(), pixmap.height())
         else:
@@ -126,8 +132,13 @@ class IokharicApp(QWidget):
             self.cafunc()
         elif self.type == 'wp':
             self.wpfunc()
-        else:
+        elif self.type == 'wa':
             self.wafunc()
+        elif self.type == 'np':
+            self.npfunc()
+        else:
+            self.nafunc()
+            
 
     def cpfunc(self):
         self.titlefield.setText('Characters Passive')
@@ -163,3 +174,18 @@ class IokharicApp(QWidget):
         word = get_word(self.wordlist)
         iokharic_word(word)
         self.askfield.setText(word)
+
+    def npfunc(self):
+        self.titlefield.setText('Numbers Passive')
+        number = get_number()
+        iokharic_word(number)
+        pixmap = QPixmap(os.path.join(os.getenv('APPDATA'), 'Iokharic-teacher', 'temp.png'))
+        self.askfield.setPixmap(pixmap)
+        self.askfield.resize(pixmap.width(), pixmap.height())
+        self.answer = number
+
+    def nafunc(self):
+        self.titlefield.setText('Numbers Active')
+        number = get_number()
+        iokharic_word(number)
+        self.askfield.setText(number)

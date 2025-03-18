@@ -38,10 +38,13 @@ def get_sample_characters():
 
 def get_word(listy):
     charcount = 100
-    while charcount > 10:
+    while charcount > 4:
         word = random.choice(listy)
         charcount = len(word)
     return word
+
+def get_number():
+    return str(random.randint(0,1000000))
 
 def iokharic_word(word):
     picturelist = []
